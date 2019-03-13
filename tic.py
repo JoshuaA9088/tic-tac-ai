@@ -2,6 +2,7 @@ import numpy as np
 import os
 import random
 import time
+from math import inf as infinity
 
 board = [[0, 0, 0],
          [0, 0, 0],
@@ -43,7 +44,7 @@ def print_board(board):
     """
     Print formatted tic tac toe board
     """
-    os.system("cls")
+    # os.system("cls")
     print("\n")
     for i in board:
         print("\t", end="")
@@ -73,6 +74,21 @@ def move(board, player, position):
     board[row][column] = player
     return board
 
+def game_over(board, i):
+    # Check win condition after comp move
+    if check_win(board, COMP):
+        print("Computer Wins!!")
+        time.sleep(1)
+        return True
+    elif check_win(board, HUMAN):
+        print("Human Wins!!")
+        time.sleep(1)
+        return True
+    elif i == 8:
+        print("Stalemate!!")
+        time.sleep(1)
+        return True
+
 # Test calc_moves
 def random_game(board):
     """
@@ -96,18 +112,7 @@ def random_game(board):
             print_board(board)
             comp_turn = True
 
-        # Check win condition after comp move
-        if check_win(board, COMP):
-            print("Computer Wins!!")
-            time.sleep(1)
-            return 0
-        elif check_win(board, HUMAN):
-            print("Human Wins!!")
-            time.sleep(1)
-            return 0
-        elif i == 8:
-            print("Stalemate!!")
-            time.sleep(1)
+        if game_over(board, i):
             return 0
 
         time.sleep(0.5)
@@ -147,11 +152,7 @@ def play_human_randomly(board):
         print_board(board)
         
         # Check win condition after human move
-        if check_win(board, COMP):
-            print("Computer Wins!!")
-            return 0
-        elif check_win(board, HUMAN):
-            print("Human Wins!!")
+        if game_over(board, i):
             return 0
 
         # Comp
@@ -160,11 +161,7 @@ def play_human_randomly(board):
         print_board(board)
         
         # Check win condition after comp move
-        if check_win(board, COMP):
-            print("Computer Wins!!")
-            return 0
-        elif check_win(board, HUMAN):
-            print("Human Wins!!")
+        if game_over(board, i):
             return 0
 
 def play_many_random(board, num_games):
@@ -174,4 +171,66 @@ def play_many_random(board, num_games):
         # Reset the game
         board = new_game()
 
-play_many_random(board, 100)
+
+def minimax(board, depth, player):
+    if player == COMP:
+        best = [-1, -1, -infinity]
+    else:
+        best = [-1, -1, +infinity]
+
+    for m in calc_moves(board):
+        x, y = m[0], m[1]
+        board[x][y] = player
+        score = minimax(board, depth - 1, HUMAN)
+        board[x][y] = 0
+        score[0], score[1] = x, y
+
+        if player == COMP:
+            if score[2] > best[2]:
+                best = score
+        else:
+            if score[2] < best[2]:
+                best = score
+    return best
+
+# play_many_random(board, 100)
+def play_smart_game(board):
+    for i in range(9):
+
+        valid = False
+
+        # Human
+        print_board(board)
+        print("Humans Turn")
+
+        while not valid:
+            row = int(input("Row: "))
+            column = int(input("Column: "))
+            if valid_move(board, [row, column]):
+                board = move(board, HUMAN, [row, column])
+                valid = True
+            else:
+                print("Invalid move, retry\n")
+                valid = False
+
+        print_board(board)
+
+        # Check win condition after human move
+        if game_over(board, i):
+            return 0
+
+        print_board(board)
+
+        depth = len(calc_moves(board))
+        print("DEPTH: ", depth)
+        my_move = minimax(board, depth, COMP)
+        print(my_move)
+        board = move(board, COMP, [my_move[0], my_move[1]])
+       
+
+        if game_over(board, i):
+            return 0
+    
+    time.sleep(0.5)
+
+play_smart_game(board)
