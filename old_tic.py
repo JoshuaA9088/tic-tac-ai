@@ -4,9 +4,7 @@ import random
 import time
 from math import inf as infinity
 
-board = [[0, 0, 0],
-         [0, 0, 0],
-         [0, 0, 0]]
+
 
 # Unplayed = 0
 HUMAN = 1
@@ -44,7 +42,7 @@ def print_board(board):
     """
     Print formatted tic tac toe board
     """
-    # os.system("cls")
+    os.system("cls")
     print("\n")
     for i in board:
         print("\t", end="")
@@ -75,18 +73,19 @@ def move(board, player, position):
     return board
 
 def game_over(board, i):
+    display_time = 0.5
     # Check win condition after comp move
     if check_win(board, COMP):
         print("Computer Wins!!")
-        time.sleep(1)
+        time.sleep(display_time)
         return True
     elif check_win(board, HUMAN):
         print("Human Wins!!")
-        time.sleep(1)
+        time.sleep(display_time)
         return True
     elif i == 8:
         print("Stalemate!!")
-        time.sleep(1)
+        time.sleep(display_time)
         return True
 
 # Test calc_moves
@@ -133,12 +132,12 @@ def play_human_randomly(board):
     Have comp play against a human randomly selecting moves
     """
     for i in range(9):
-        valid = False 
+        valid = False
 
         # Human
         print_board(board)
         print("Humans Turn")
-        
+
         while not valid:
             row = int(input("Row: "))
             column = int(input("Column: "))
@@ -148,9 +147,9 @@ def play_human_randomly(board):
             else:
                 print("Invalid move, retry\n")
                 valid = False
-        
+
         print_board(board)
-        
+
         # Check win condition after human move
         if game_over(board, i):
             return 0
@@ -159,7 +158,7 @@ def play_human_randomly(board):
         my_move = random.choice(calc_moves(board))
         move(board, COMP, my_move)
         print_board(board)
-        
+
         # Check win condition after comp move
         if game_over(board, i):
             return 0
@@ -167,7 +166,7 @@ def play_human_randomly(board):
 def play_many_random(board, num_games):
     for _ in range(num_games):
         random_game(board)
-        
+
         # Reset the game
         board = new_game()
 
@@ -226,11 +225,37 @@ def play_smart_game(board):
         my_move = minimax(board, depth, COMP)
         print(my_move)
         board = move(board, COMP, [my_move[0], my_move[1]])
-       
+
 
         if game_over(board, i):
             return 0
-    
+
     time.sleep(0.5)
 
-play_smart_game(board)
+def play_smart_game_against_self(board):
+    for i in range(9):
+
+        # Comp 1 Uses minimax
+        depth = len(calc_moves(board))
+        my_move = minimax(board, depth, COMP)
+        board = move(board, COMP, [my_move[0], my_move[1]])
+        print_board(board)
+
+        if game_over(board, i):
+            return 0
+
+        # Comp 2 Randomly picks
+        possible_moves = calc_moves(board)
+        my_move = random.choice(possible_moves)
+        board = move(board, HUMAN, my_move)
+        print_board(board)
+
+        if game_over(board, i):
+            return 0
+
+        time.sleep(0.5)
+
+
+for i in range(100):
+    board = new_game()
+    play_smart_game_against_self(board)
