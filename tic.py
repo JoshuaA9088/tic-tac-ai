@@ -11,12 +11,18 @@ board = [[0, 0, 0],
 HUMAN = 1
 COMP = 2
 
+def new_game():
+    board = [[0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]]
+    return board
+
 def check_win(state, player):
     """
     This function tests if a specific player wins. Possibilities:
-    * Three rows    [X X X] or [O O O]
-    * Three cols    [X X X] or [O O O]
-    * Two diagonals [X X X] or [O O O]
+    * Three rows
+    * Three cols
+    * Two diagonals
     """
     win_state = [
         [state[0][0], state[0][1], state[0][2]],
@@ -73,19 +79,38 @@ def random_game(board):
     Randomly select moves and play them.
     Test for calc_moves() and move()
     """
+    comp_turn = True
+
     for i in range(9):
-        possible_moves = calc_moves(board)
-        my_move = random.choice(possible_moves)
-        board = move(board, COMP, my_move)
-        print_board(board)
+
+        if comp_turn:
+            possible_moves = calc_moves(board)
+            my_move = random.choice(possible_moves)
+            board = move(board, COMP, my_move)
+            print_board(board)
+            comp_turn = False
+        else:
+            possible_moves = calc_moves(board)
+            my_move = random.choice(possible_moves)
+            board = move(board, HUMAN, my_move)
+            print_board(board)
+            comp_turn = True
+
         # Check win condition after comp move
         if check_win(board, COMP):
             print("Computer Wins!!")
+            time.sleep(1)
             return 0
         elif check_win(board, HUMAN):
             print("Human Wins!!")
+            time.sleep(1)
             return 0
-        time.sleep(.5)
+        elif i == 8:
+            print("Stalemate!!")
+            time.sleep(1)
+            return 0
+
+        time.sleep(0.5)
 
 def valid_move(board, move):
     """
@@ -142,4 +167,11 @@ def play_human_randomly(board):
             print("Human Wins!!")
             return 0
 
-random_game(board)
+def play_many_random(board, num_games):
+    for _ in range(num_games):
+        random_game(board)
+        
+        # Reset the game
+        board = new_game()
+
+play_many_random(board, 100)
