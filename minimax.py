@@ -4,130 +4,49 @@ import platform
 import time
 from os import system
 from TicTacToe import *
-"""
-def evaluate(state):
-    if wins(state, COMP):
-        score = +1
-    elif wins(state, HUMAN):
-        score = -1
+
+game = Tic()
+HUMAN = game.HUMAN
+COMP = game.COMP
+
+def minimax(board, player):
+    possible_moves = game.calc_moves()
+    # Maximizer
+    if player == game.COMP:
+        best = [1, 1, -infinity]
+    # Minimizer
     else:
-        score = 0
+        best = [1, 1, infinity]
+    # Iterate through possible
+    for move in possible_moves:
+        row, column = move[0], move[1]
+        board[row][column] = player
+        score = minimax(board, game.HUMAN if player == game.COMP else game.COMP)
+        score[0], score[1] = row, column
 
-    return score
-
-
-def minimax(state, depth, player):
-    if player == COMP:
-        best = [-1, -1, -infinity]
-    else:
-        best = [-1, -1, +infinity]
-
-    if depth == 0 or game_over(state):
-        score = evaluate(state)
-        return [-1, -1, score]
-
-    for cell in empty_cells(state):
-        x, y = cell[0], cell[1]
-        state[x][y] = player
-        score = minimax(state, depth - 1, -player)
-        state[x][y] = 0
-        score[0], score[1] = x, y
-
-        if player == COMP:
+        if player == game.COMP:
             if score[2] > best[2]:
-                best = score  # max value
+                best = score
         else:
             if score[2] < best[2]:
-                best = score  # min value
-
+                best = score
     return best
 
-def ai_turn(c_choice, h_choice):
-    depth = len(empty_cells(board))
-    if depth == 0 or game_over(board):
-        return
-
-    clean()
-    print(f'Computer turn [{c_choice}]')
-    render(board, c_choice, h_choice)
-
-    if depth == 9:
-        x = choice([0, 1, 2])
-        y = choice([0, 1, 2])
-    else:
-        move = minimax(board, depth, COMP)
-        x, y = move[0], move[1]
-
-    set_move(x, y, COMP)
-    time.sleep(1)
-
+def randomVai():
+    while not game.game_over():
+        game.random_move(game.HUMAN)
+        board = game.get_board()
+        best = minimax(board, game.COMP)
+        # print(best)
+        game.move(game.COMP, best)
+        time.sleep(1)
+        # print('foo')
 def main():
-    clean()
-    h_choice = ''  # X or O
-    c_choice = ''  # X or O
-    first = ''  # if human is the first
-
-    # Human chooses X or O to play
-    while h_choice != 'O' and h_choice != 'X':
-        try:
-            print('')
-            h_choice = input('Choose X or O\nChosen: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Setting computer's choice
-    if h_choice == 'X':
-        c_choice = 'O'
-    else:
-        c_choice = 'X'
-
-    # Human may starts first
-    clean()
-    while first != 'Y' and first != 'N':
-        try:
-            first = input('First to start?[y/n]: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Main loop of this game
-    while len(empty_cells(board)) > 0 and not game_over(board):
-        if first == 'N':
-            ai_turn(c_choice, h_choice)
-            first = ''
-
-        human_turn(c_choice, h_choice)
-        ai_turn(c_choice, h_choice)
-
-    # Game over message
-    if wins(board, HUMAN):
-        clean()
-        print(f'Human turn [{h_choice}]')
-        render(board, c_choice, h_choice)
-        print('YOU WIN!')
-    elif wins(board, COMP):
-        clean()
-        print(f'Computer turn [{c_choice}]')
-        render(board, c_choice, h_choice)
-        print('YOU LOSE!')
-    else:
-        clean()
-        render(board, c_choice, h_choice)
-        print('DRAW!')
-
-    exit()
-"""
-
-def main():
-    game = Tic()
-    for i in range(1000):
-        game.random_game()
-        # time.sleep(10)
+    game.randomVai()
+    # best = minimax(board, game.COMP)
+    # for i in range(1000):
+    #     game.random_game()
+    #     time.sleep(0.1)
 
 if __name__ == "__main__":
     main()

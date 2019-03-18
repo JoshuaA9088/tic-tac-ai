@@ -1,3 +1,4 @@
+from math import inf as infinity
 import random
 import os
 import time
@@ -24,7 +25,7 @@ class Tic:
         """
         Print formatted tic tac toe board
         """
-        os.system("cls")
+        # os.system("cls")
         print("\n")
         for i in self.board:
              print("\t", end="")
@@ -79,18 +80,27 @@ class Tic:
                     self.new_game()
                     return True
 
-    def calc_moves(self):
+    def calc_moves(self, opt_board=None):
         """
-        Determine which moves are still possible
+        Determine which moves are still possible on default board
+        or specified board
         """
         possible_moves = []
         # i = row
         # j = column
-        for i in range(len(self.board)):
-            for j in range(len(self.board[i])):
-                if self.board[i][j] == 0:
-                    possible_moves.append([i, j])
-        return possible_moves
+        if opt_board == None:
+            for i in range(len(self.board)):
+                for j in range(len(self.board[i])):
+                    if self.board[i][j] == 0:
+                        possible_moves.append([i, j])
+            return possible_moves
+
+        else:
+            for i in range(len(opt_board)):
+                for j in range(len(opt_board[i])):
+                    if opt_board[i][j] == 0:
+                        possible_moves.append([i, j])
+            return possible_moves
 
     def valid_move(self, move):
         """
@@ -111,12 +121,13 @@ class Tic:
         column = position[1]
 
         self.board[row][column] = player
+        self.print_board()
 
-    def getBoard(self):
+    def get_board(self):
         """
-        Return the current board
+        Return A COPY of the current board
         """
-        return self.board
+        return self.board.copy()
 
     def human_move(self):
         valid = False
@@ -125,7 +136,7 @@ class Tic:
             row = int(input("Row: "))
             column = int(input("Column: "))
             if self.valid_move([row, column]):
-                self.move(HUMAN, [row, column])
+                self.move(self.HUMAN, [row, column])
                 valid = True
             else:
                 print("Invalid move, retry\n")
@@ -146,4 +157,45 @@ class Tic:
             else:
                 self.random_move(self.HUMAN)
                 comp_turn = True
-            time.sleep(0.5)
+            time.sleep(0.1)
+
+    def minimax(self, temp_board, player):
+        possible_moves = self.calc_moves(opt_board=temp_board)
+
+        if player == self.COMP:
+            best = [1, 1, -infinity]
+        else:
+            best = [1, 1, infinity]
+        #
+        for move in possible_moves:
+            row, column = move[0], move[1]
+            temp_board[row][column] = player
+            new_player = self.HUMAN if player == self.COMP else self.COMP
+            score = self.minimax(temp_board, new_player)
+            score[0], score[1] = row, column
+
+            if player == self.COMP:
+                if score[2] > best[2]:
+                    best = score
+            else:
+                if score[2] < best[2]:
+                    best = score
+        print("MINIMAX: ", id(temp_board))
+        return best
+
+    def randomVai(self):
+        comp_turn = True
+        while not self.game_over():
+            if comp_turn:
+                temp_board = self.get_board()
+                print("RANDOMVAI: ", id(temp_board))
+                best = self.minimax(temp_board, self.COMP)
+                self.print_board()
+                # print(best)
+                my_move = [best[0], best[1]]
+                # print("MY_MOVE ", my_move)
+                self.move(self.COMP, my_move)
+                comp_turn = False
+            else:
+                self.human_move()
+                comp_turn = True
