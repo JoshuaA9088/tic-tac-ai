@@ -7,11 +7,12 @@ class Tic:
     """
     Tic Tac Toe!
     """
-    def __init__(self):
-        self.new_game()
-        self.print_board()
+    def __init__(self, print_game=True):
+        self.print = print_game
         self.HUMAN = 1
         self.COMP = 2
+        self.new_game()
+        self.print_board()
 
     def new_game(self):
         """
@@ -25,12 +26,13 @@ class Tic:
         """
         Print formatted tic tac toe board
         """
-        # os.system("cls")
-        print("\n")
-        for i in self.board:
-             print("\t", end="")
-             print(i)
-        print("")
+        if self.print:
+            os.system("cls")
+            print("\n")
+            for i in self.board:
+                 print("\t", end="")
+                 print(i)
+            print("")
 
     def check_win(self, player):
         """
@@ -61,23 +63,30 @@ class Tic:
         If so display a message and reset the game.
         """
         display_time = 0.5
+        self.winner = None
         # Check win condition
         if self.check_win(self.COMP):
-            print("Computer Wins!!")
-            time.sleep(display_time)
+            if self.print:
+                print("Computer Wins!!")
+                time.sleep(display_time)
             self.new_game()
+            self.winner = self.COMP
             return True
         elif self.check_win(self.HUMAN):
-            print("Human Wins!!")
-            time.sleep(display_time)
+            if self.print:
+                print("Human Wins!!")
+                time.sleep(display_time)
             self.new_game()
+            self.winner = self.HUMAN
             return True
         elif 0 not in self.board[0]:
             if 0 not in self.board[1]:
                 if 0 not in self.board[2]:
-                    print("Stalemate!!")
-                    time.sleep(display_time)
+                    if self.print:
+                        print("Stalemate!!")
+                        time.sleep(display_time)
                     self.new_game()
+                    self.winner = 0
                     return True
 
     def calc_moves(self, opt_board=None):
@@ -147,17 +156,21 @@ class Tic:
         my_move = random.choice(self.calc_moves())
         self.move(player, my_move)
         self.print_board()
+        return my_move
 
     def random_game(self):
+        human_moves = []
+        comp_moves = []
         comp_turn = True
         while not self.game_over():
             if comp_turn:
-                self.random_move(self.COMP)
+                comp_moves.append(self.random_move(self.COMP))
                 comp_turn = False
             else:
-                self.random_move(self.HUMAN)
+                human_moves.append(self.random_move(self.HUMAN))
                 comp_turn = True
-            time.sleep(0.1)
+            if self.print: time.sleep(0.1)
+        return human_moves, comp_moves, self.winner
 
     def minimax(self, temp_board, player):
         possible_moves = self.calc_moves(opt_board=temp_board)
