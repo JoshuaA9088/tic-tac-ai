@@ -4,8 +4,6 @@ import random
 import time
 from math import inf as infinity
 
-
-
 # Unplayed = 0
 HUMAN = 1
 COMP = 2
@@ -173,9 +171,9 @@ def play_many_random(board, num_games):
 
 def minimax(board, depth, player):
     if player == COMP:
-        best = [-1, -1, -infinity]
+        best = [1, 1, -infinity]
     else:
-        best = [-1, -1, +infinity]
+        best = [1, 1, +infinity]
 
     for m in calc_moves(board):
         x, y = m[0], m[1]

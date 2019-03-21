@@ -27,7 +27,7 @@ class Tic:
         Print formatted tic tac toe board
         """
         if self.print:
-            os.system("cls")
+            # os.system("cls")
             print("\n")
             for i in self.board:
                  print("\t", end="")
@@ -88,6 +88,18 @@ class Tic:
                     self.new_game()
                     self.winner = 0
                     return True
+    def evaluate(self):
+        """
+        Return heuristic evaluation of state.
+        """
+        if self.check_win(self.COMP):
+            score = +1
+        elif self.check_win(self.HUMAN):
+            score = -1
+        else:
+            score = 0
+
+        return score
 
     def calc_moves(self, opt_board=None):
         """
@@ -170,45 +182,4 @@ class Tic:
                 human_moves.append(self.random_move(self.HUMAN))
                 comp_turn = True
             if self.print: time.sleep(0.1)
-        return human_moves, comp_moves, self.winner
-
-    def minimax(self, temp_board, player):
-        possible_moves = self.calc_moves(opt_board=temp_board)
-
-        if player == self.COMP:
-            best = [1, 1, -infinity]
-        else:
-            best = [1, 1, infinity]
-        #
-        for move in possible_moves:
-            row, column = move[0], move[1]
-            temp_board[row][column] = player
-            new_player = self.HUMAN if player == self.COMP else self.COMP
-            score = self.minimax(temp_board, new_player)
-            score[0], score[1] = row, column
-
-            if player == self.COMP:
-                if score[2] > best[2]:
-                    best = score
-            else:
-                if score[2] < best[2]:
-                    best = score
-        print("MINIMAX: ", id(temp_board))
-        return best
-
-    def randomVai(self):
-        comp_turn = True
-        while not self.game_over():
-            if comp_turn:
-                temp_board = self.get_board()
-                print("RANDOMVAI: ", id(temp_board))
-                best = self.minimax(temp_board, self.COMP)
-                self.print_board()
-                # print(best)
-                my_move = [best[0], best[1]]
-                # print("MY_MOVE ", my_move)
-                self.move(self.COMP, my_move)
-                comp_turn = False
-            else:
-                self.human_move()
-                comp_turn = True
+        return human_moves, comp_moves, self.winner, self.board
