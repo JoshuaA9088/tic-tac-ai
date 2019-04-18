@@ -62,7 +62,7 @@ def game_over(board):
     Check and see if a player wins,
     If so display a message and reset the game.
     """
-    display_time = 0.5
+    display_time = 0.2
     # Check win condition
     if check_win(board, COMP):
         print("Computer Wins!!")
@@ -287,11 +287,15 @@ def ai_V_ai(board):
 
         # Ai 1 - COMP
         depth = len(calc_moves(board))
-        if depth == 9:
-            board = random_move(board, COMP)
-        else:
-            comp_move = minimax_COMP(board, depth, COMP)
-            move(board, COMP, [comp_move[0], comp_move[1]])
+        comp_move = minimax_COMP(board, depth, COMP)
+        move(board, COMP, [comp_move[0], comp_move[1]])
+        time.sleep(0.1)
+        # if depth == 9:
+        #     board = random_move(board, COMP)
+        # else:
+            # comp_move = minimax_COMP(board, depth, COMP)
+            # move(board, COMP, [comp_move[0], comp_move[1]])
+            # move(board, COMP, [1, 1])
         time.sleep(0.1)
 
         if game_over(board):
