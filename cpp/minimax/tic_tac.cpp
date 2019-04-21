@@ -21,7 +21,7 @@ int doMove(int dim, vector<vector<int>> coords, vector<vector<int>> &xPlayed, ve
 
 int main(int argc, char *argv[])
 {
-	initscr();
+	// initscr();
 	cbreak();
     noecho();
 	keypad(stdscr, TRUE);
@@ -73,7 +73,7 @@ int doMove(int dim, vector<vector<int>> coords, vector<vector<int>> &xPlayed, ve
     while (awaiting){
         int ch = getch();
 
-		if(ch == 'q') // Q to exit gracefully
+		if(ch == 'q') // Q to exit
         {
             endwin();
             clear();

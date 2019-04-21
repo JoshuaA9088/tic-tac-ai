@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream> // REMOVE
 
+#include "globals.h"
+//#include "gui.h"
 #include "game_rules.h"
 
 using std::vector;
@@ -27,27 +29,26 @@ vector<vector<int>> map_coords(int dim)
     return ret;
 }
 
-vector<vector<int>> calc_moves(int dim, vector<vector<int>> xPlayed, vector<vector<int>> oPlayed)
+vector<vector<int>> calc_moves()
 {
-    vector<vector<int>> coords = map_coords(dim);
-    vector<vector<int>> ret;
-    // Append all not played moves to
+    vector<vector<int>> playable = map_coords(dim);
+
     for (vector<int> move : xPlayed)
     {
-        if (!(find(coords.begin(), coords.end(), move) != coords.end()))
+        if (find(playable.begin(), playable.end(), move) != playable.end())
         {
             // Erase remove idiom
-            coords.erase(std::remove(coords.begin(), coords.end(), move), coords.end());
+            playable.erase(std::remove(playable.begin(), playable.end(), move), playable.end());
         }
     }
     for (vector<int> move : oPlayed)
     {
-        if (!(find(coords.begin(), coords.end(), move) != coords.end()))
+        if (find(playable.begin(), playable.end(), move) != playable.end())
         {
-            coords.erase(std::remove(coords.begin(), coords.end(), move), coords.end());
+            playable.erase(std::remove(playable.begin(), playable.end(), move), playable.end());
         }
     }
-    return coords;
+    return playable;
 }
 
 // Check and see if vec a is a subset of b
@@ -60,8 +61,6 @@ bool IsSubset(vector<vector<int>> A, vector<vector<int>> B)
 
 bool check_win(char player, vector<vector<int>> played)
 {
-	vector<vector<int>> coords = map_coords(3);
-
 	// Horizontal
 	vector<vector<int>> win_0 = {coords[0], coords[1], coords[2]};
 	vector<vector<int>> win_1 = {coords[3], coords[4], coords[5]};
