@@ -3,7 +3,6 @@
 #include <iostream> // REMOVE
 
 #include "globals.h"
-//#include "gui.h"
 #include "game_rules.h"
 
 using std::vector;

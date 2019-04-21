@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include <vector>
+#include <ncurses.h>
 using std::vector;
 
 vector<int> getMin(vector<vector<int>>);

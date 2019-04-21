@@ -9,6 +9,7 @@
 #include "globals.h"
 #include "gui.h"
 #include "game_rules.h"
+#include "minimax.h"
 
 #define X 'X'
 #define O 'O'
@@ -33,8 +34,11 @@ vector<int> max = getMax(map_coords(dim));
 // GLOBAL VARS //
 
 void random_v_human(void);
+void human_v_minimax(void);
+
 void human_move(void);
-void comp_move(void);
+void comp_move_random(void);
+void comp_move_minimax(void);
 
 int main()
 {
@@ -53,7 +57,8 @@ int main()
     board(stdscr, y, x, dim, dim, w, h);
 	move(coords[4][0], coords[4][1]);
 
-	random_v_human();
+	// random_v_human();
+	human_v_minimax();
 
 	return 0;
 }
@@ -71,7 +76,7 @@ void random_v_human()
 			safe_exit();
 	    }
 
-		comp_move();
+		comp_move_random();
 
 		if (check_win(O, oPlayed))
 		{
@@ -80,6 +85,32 @@ void random_v_human()
 			safe_exit();
 	    }
 	}
+	safe_exit();
+}
+
+void human_v_minimax()
+{
+	while (xPlayed.size() + oPlayed.size() < 9)
+	{
+		human_move();
+
+		if (check_win(X, xPlayed))
+		{
+	        mvprintw(LINES - 2, 0, "                        ");
+	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+			safe_exit();
+	    }
+
+		comp_move_minimax();
+
+		if (check_win(O, oPlayed))
+		{
+	        mvprintw(LINES - 2, 0, "                        ");
+	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+			safe_exit();
+	    }
+	}
+	safe_exit();
 }
 
 void human_move()
@@ -94,23 +125,34 @@ void human_move()
             mvprintw(LINES - 2, 0, "                        ");
             xPlayed.push_back(myMove);
             mvaddch(myMove[0], myMove[1], X);
+			move(myMove[0], myMove[1]);
+			refresh();
             invalid_move = false;
         }
         else
         {
             mvprintw(LINES - 2, 0, "Invalid move, try again!");
+			move(myMove[0], myMove[1]);
         }
-        move(myMove[0], myMove[1]);
     }
-    // Check to see if that was a winning move
-
 }
 
-void comp_move()
+void comp_move_random()
 {
     vector<vector<int>> possible_moves = calc_moves();
 	int myMoveIndex = rand() % possible_moves.size();
 	mvaddch(possible_moves[myMoveIndex][0], possible_moves[myMoveIndex][1], O);
 	move(possible_moves[myMoveIndex][0], possible_moves[myMoveIndex][1]);
 	oPlayed.push_back(possible_moves[myMoveIndex]);
+	return;
+}
+
+void comp_move_minimax()
+{
+    vector<vector<int>> possible_moves = calc_moves();
+	vector<int> myMove = minimax(possible_moves.size(), O);
+	oPlayed.push_back({myMove[0], myMove[1]});
+	mvaddch(myMove[0], myMove[1], O);
+	move(myMove[0], myMove[1]);
+	return;
 }

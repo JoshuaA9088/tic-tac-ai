@@ -120,7 +120,6 @@ void board(WINDOW *win, int starty, int startx, int lines, int cols,
 		mvwaddch(win, starty, i, ACS_TTEE);
 		mvwaddch(win, endy, i, ACS_BTEE);
 	}
-
 	wrefresh(win);
 }
 
