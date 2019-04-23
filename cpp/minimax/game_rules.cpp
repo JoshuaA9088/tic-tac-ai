@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <vector>
-#include <iostream> // REMOVE
 
 #include "globals.h"
 #include "game_rules.h"
