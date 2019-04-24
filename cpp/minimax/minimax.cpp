@@ -18,6 +18,7 @@ using std::vector;
 vector<int> minimax(int depth, char player)
 {
     vector<int> best;
+    vector<int> score;
     vector<vector<int>> possible_moves = calc_moves();
 
     if (player == MAX)
@@ -32,7 +33,6 @@ vector<int> minimax(int depth, char player)
     // Draw
     if (depth == 0)
     {
-        // move(coords[4][0], coords[4][1]);
         best = {coords[4][0], coords[4][1], 0};
         return best;
     }
@@ -54,11 +54,11 @@ vector<int> minimax(int depth, char player)
         if (player == MAX)
         {
             xPlayed.push_back(cell);
-            vector<int> score = minimax(depth - 1, MIN);
+            score = minimax(depth - 1, MIN);
             xPlayed.pop_back();
             // xPlayed.erase(std::remove(xPlayed.begin(), xPlayed.end(), cell), xPlayed.end());
-            score[0] = cell[1];
-            score[1] = cell[0];
+            score[0] = cell[0];
+            score[1] = cell[1];
 
             if (score[2] > best[2])
             {
@@ -68,7 +68,7 @@ vector<int> minimax(int depth, char player)
         else if (player == MIN)
         {
             oPlayed.push_back(cell);
-            vector<int> score = minimax(depth - 1, MAX);
+            score = minimax(depth - 1, MAX);
             oPlayed.pop_back();
             // oPlayed.erase(std::remove(oPlayed.begin(), oPlayed.end(), cell), oPlayed.end());
             score[0] = cell[0];

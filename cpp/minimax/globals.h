@@ -14,11 +14,3 @@ extern vector<int> max;
 extern vector<int> min;
 
 #endif
-
-// #ifndef X
-// #define X 'X'
-// #endif
-//
-// #ifndef O
-// #define O 'O'
-// #endif

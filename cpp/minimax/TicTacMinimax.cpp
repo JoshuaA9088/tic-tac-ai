@@ -34,12 +34,7 @@ vector<int> min = getMin(map_coords(dim));
 vector<int> max = getMax(map_coords(dim));
 // GLOBAL VARS //
 
-void random_v_human(void);
-void human_v_minimax(void);
-
-void human_move(void);
-void comp_move_random(void);
-void comp_move_minimax(void);
+void test(void);
 
 int main()
 {
@@ -59,9 +54,48 @@ int main()
 	move(coords[4][0], coords[4][1]);
 
 	// random_v_human();
-	human_v_minimax();
+	// human_v_minimax();
 	// minimax_v_minimax();
 	// minimax_v_random();
+	test();
+
+	// safe_exit();
 
 	return 0;
+}
+
+void test()
+{
+	char winner;
+	int xW = 0;
+	int oW = 0;
+	int stale = 0;
+
+	for (int i = 0; i < 10; i++)
+	{
+		winner = minimax_v_minimax();
+
+		if (winner == X)
+		{
+			xW += 1;
+		}
+		else if (winner == O)
+		{
+			oW += 1;
+		}
+		else if (winner == 'S')
+		{
+			stale += 1;
+		}
+		reset();
+		refresh();
+	}
+
+	endwin();
+	clear();
+
+	std::cout << "X Wins: " << xW << endl;
+	std::cout << "O Wins: " << oW << endl;
+	std::cout << "Stalemates: " << stale << endl;
+	return;
 }

@@ -11,7 +11,7 @@ void human_v_minimax(void);
 void human_move(void);
 void comp_move_random(char player);
 void comp_move_minimax(char player);
-void minimax_v_minimax(void);
+char minimax_v_minimax(void);
 void minimax_v_random(void);
 
 
