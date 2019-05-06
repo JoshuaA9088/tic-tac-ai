@@ -54,12 +54,12 @@ int main()
 	move(coords[4][0], coords[4][1]);
 
 	// random_v_human();
-	// human_v_minimax();
+	human_v_minimax();
 	// minimax_v_minimax();
 	// minimax_v_random();
-	test();
+	//test();
 
-	// safe_exit();
+	safe_exit();
 
 	return 0;
 }
