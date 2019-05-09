@@ -126,4 +126,4 @@ dmypy.json
 .vscode/
 
 # Binaries
-tic
+tic.out
