@@ -46,6 +46,7 @@ void human_v_minimax()
 		{
 	        mvprintw(LINES - 2, 0, "                        ");
 	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+			break;
 	    }
 
 		comp_move_minimax(O);
@@ -54,6 +55,7 @@ void human_v_minimax()
 		{
 	        mvprintw(LINES - 2, 0, "                        ");
 	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+			break;
 	    }
 	}
 }
