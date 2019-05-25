@@ -1,10 +1,10 @@
 #include <iostream>
 #include <ncurses.h>
-#include <cstdlib> // exit
+#include <cstdlib>
 #include <vector>
-#include <unistd.h> // usleep
-#include <algorithm> // std::find
-#include <time.h> // Randomize seed for rand
+#include <unistd.h>
+#include <algorithm>
+#include <time.h>
 
 #include "globals.h"
 #include "gui.h"
@@ -25,10 +25,10 @@ using std::find;
 int dim = 3;
 int y = 2, x = 2, w = 4, h = 2;
 
-vector<vector<int>> xPlayed;
-vector<vector<int>> oPlayed;
+vector< vector<int> > xPlayed;
+vector< vector<int> > oPlayed;
 
-vector<vector<int>> coords = map_coords(dim);
+vector< vector<int> > coords = map_coords(dim);
 
 vector<int> min = getMin(map_coords(dim));
 vector<int> max = getMax(map_coords(dim));
@@ -53,14 +53,13 @@ int main()
     board(stdscr, y, x, dim, dim, w, h);
 	move(coords[4][0], coords[4][1]);
 
-	// random_v_human();
 	human_v_minimax();
+	// random_v_human();
 	// minimax_v_minimax();
 	// minimax_v_random();
 	// test();
 
-     safe_exit();
-
+	safe_exit();
 	return 0;
 }
 
@@ -87,6 +86,7 @@ void test()
 		{
 			stale += 1;
 		}
+
 		reset();
 		refresh();
 	}

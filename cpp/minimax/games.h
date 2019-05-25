@@ -14,5 +14,4 @@ void comp_move_minimax(char player);
 char minimax_v_minimax(void);
 void minimax_v_random(void);
 
-
 #endif

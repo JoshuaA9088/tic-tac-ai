@@ -34,6 +34,7 @@ void random_v_human()
 	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
 	    }
 	}
+	return;
 }
 
 void human_v_minimax()
@@ -58,6 +59,7 @@ void human_v_minimax()
 			break;
 	    }
 	}
+	return;
 }
 
 void human_move()
@@ -65,7 +67,8 @@ void human_move()
     bool invalid_move = true;
 	vector<int> myMove;
 	vector<vector<int>> possible_moves;
-    while (invalid_move)
+    
+	while (invalid_move)
     {
         myMove = handleCursor();
         possible_moves = calc_moves();
@@ -84,6 +87,7 @@ void human_move()
 			move(myMove[0], myMove[1]);
         }
     }
+	return;
 }
 
 void comp_move_random(char player)
@@ -135,10 +139,6 @@ char minimax_v_minimax()
 {
 	vector<vector<int>> possible_moves = calc_moves();
 	vector<int> myMove;
-
-	// Decide the first move to reduce time to play just kidding
-	// oPlayed.push_back(possible_moves[4]);
-	// mvaddch(possible_moves[4][0], possible_moves[4][1], O);
 	move(possible_moves[4][0], possible_moves[4][1]);
 
 	while (xPlayed.size() + oPlayed.size() < 9)
@@ -168,7 +168,6 @@ char minimax_v_minimax()
 
 void minimax_v_random()
 {
-	// human_move();
 	move(coords[4][0], coords[4][1]);
 	while (xPlayed.size() + oPlayed.size() < 9)
 	{
@@ -193,6 +192,6 @@ void minimax_v_random()
 	    }
 
 		usleep(100000);
-
 	}
+	return;
 }

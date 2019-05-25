@@ -15,7 +15,7 @@
 using std::vector;
 using std::find;
 
-vector<int> getMin(vector<vector<int>> b)
+vector<int> getMin(vector< vector<int> > b)
 {
     int minX = INT8_MAX;
     int minY = INT8_MAX;
@@ -32,7 +32,7 @@ vector<int> getMin(vector<vector<int>> b)
     return ret;
 }
 
-vector<int> getMax(vector<vector<int>> b)
+vector<int> getMax(vector< vector<int> > b)
 {
     int maxX = 0;
     int maxY = 0;
@@ -44,6 +44,7 @@ vector<int> getMax(vector<vector<int>> b)
         if (v[0] > maxY) maxY = v[0];
         if (v[1] > maxX) maxX = v[1];
     }
+
     ret.push_back(maxY);
     ret.push_back(maxX);
     return ret;
@@ -83,6 +84,7 @@ vector<int> handleCursor()
             if ((cY + 2) <= max[0]) move(cY + 2, cX);
         }
     }while (ch != ' ');
+    
     getyx(stdscr, cY, cX);
     return {cY, cX};
 }
@@ -123,7 +125,8 @@ void board(WINDOW *win, int starty, int startx, int lines, int cols,
 	wrefresh(win);
 }
 
-void safe_exit(){
+void safe_exit()
+{
     mvprintw(LINES - 1, 0, "Press any key to exit...");
     getch();
     endwin();
