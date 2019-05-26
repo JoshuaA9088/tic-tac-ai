@@ -180,8 +180,6 @@ void minimax_v_random()
 	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
 	    }
 
-		usleep(100000);
-
 		comp_move_random(X);
 		refresh();
 
@@ -191,7 +189,6 @@ void minimax_v_random()
 	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
 	    }
 
-		usleep(100000);
 	}
 	return;
 }
