@@ -30,14 +30,8 @@ vector<int> minimax(int depth, char player)
         best = {coords[4][0], coords[4][1], INT8_MAX};
     }
 
-    // Draw
-    if (depth == 0)
-    {
-        best = {coords[4][0], coords[4][1], 0};
-        return best;
-    }
     // Win
-    else if (check_win(X, xPlayed))
+    if (check_win(X, xPlayed))
     {
         best = {coords[4][0], coords[4][1], +1};
         return best;
@@ -46,6 +40,12 @@ vector<int> minimax(int depth, char player)
     else if (check_win(O, oPlayed))
     {
         best = {coords[4][0], coords[4][1], -1};
+        return best;
+    }
+    // Draw
+    else if (depth == 0)
+    {
+        best = {coords[4][0], coords[4][1], 0};
         return best;
     }
 
