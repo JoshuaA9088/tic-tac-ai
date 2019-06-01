@@ -53,7 +53,8 @@ int main()
     board(stdscr, y, x, dim, dim, w, h);
 	move(coords[4][0], coords[4][1]);
 
-	human_v_minimax();
+	// human_v_minimax();
+	minimax_v_human();
 	// random_v_human();
 	// minimax_v_minimax();
 	// minimax_v_random();

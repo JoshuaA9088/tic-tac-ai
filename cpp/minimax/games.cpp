@@ -50,6 +50,39 @@ void human_v_minimax()
 			break;
 	    }
 
+		if (xPlayed.size() + oPlayed.size() == 9) break;
+		comp_move_minimax(O);
+
+		if (check_win(O, oPlayed))
+		{
+	        mvprintw(LINES - 2, 0, "                        ");
+	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+			break;
+	    }
+	}
+	return;
+}
+
+void minimax_v_human()
+{
+	// Set first move
+	oPlayed.push_back(coords[0]);
+	mvaddch(coords[0][0], coords[0][1], O);
+	move(coords[0][0], coords[0][1]);
+	refresh();
+
+	while (xPlayed.size() + oPlayed.size() < 9)
+	{
+		human_move();
+
+		if (check_win(X, xPlayed))
+		{
+	        mvprintw(LINES - 2, 0, "                        ");
+	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+			break;
+	    }
+		
+		if (xPlayed.size() + oPlayed.size() == 9) break;
 		comp_move_minimax(O);
 
 		if (check_win(O, oPlayed))

@@ -13,5 +13,6 @@ void comp_move_random(char player);
 void comp_move_minimax(char player);
 char minimax_v_minimax(void);
 void minimax_v_random(void);
+void minimax_v_human(void);
 
 #endif
