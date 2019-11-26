@@ -3,10 +3,12 @@ import random
 import os
 import time
 
+
 class Tic:
     """
     Tic Tac Toe!
     """
+
     def __init__(self, print_game=True):
         self.print = print_game
         self.HUMAN = 1
@@ -19,8 +21,8 @@ class Tic:
         Reset the game
         """
         self.board = [[0, 0, 0],
-                     [0, 0, 0],
-                     [0, 0, 0]]
+                      [0, 0, 0],
+                      [0, 0, 0]]
 
     def print_board(self):
         """
@@ -30,8 +32,8 @@ class Tic:
             # os.system("cls")
             print("\n")
             for i in self.board:
-                 print("\t", end="")
-                 print(i)
+                print("\t", end="")
+                print(i)
             print("")
 
     def check_win(self, player):
@@ -88,6 +90,7 @@ class Tic:
                     self.new_game()
                     self.winner = 0
                     return True
+
     def evaluate(self):
         """
         Return heuristic evaluation of state.
@@ -109,7 +112,7 @@ class Tic:
         possible_moves = []
         # i = row
         # j = column
-        if opt_board == None:
+        if opt_board is None:
             for i in range(len(self.board)):
                 for j in range(len(self.board[i])):
                     if self.board[i][j] == 0:
@@ -181,5 +184,6 @@ class Tic:
             else:
                 human_moves.append(self.random_move(self.HUMAN))
                 comp_turn = True
-            if self.print: time.sleep(0.1)
+            if self.print:
+                time.sleep(0.1)
         return human_moves, comp_moves, self.winner, self.board

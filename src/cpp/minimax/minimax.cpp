@@ -19,7 +19,7 @@ vector<int> minimax(int depth, char player)
 {
     vector<int> best;
     vector<int> score;
-    vector< vector<int> > possible_moves = calc_moves();
+    vector<vector<int>> possible_moves = calc_moves();
 
     if (player == MAX)
     {

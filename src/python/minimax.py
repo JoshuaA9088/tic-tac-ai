@@ -13,6 +13,7 @@ board = [[0, 0, 0],
          [0, 0, 0],
          [0, 0, 0]]
 
+
 def minimax(board, depth, player):
     if player == COMP:
         best = [1, 1, -infinity]
@@ -42,6 +43,7 @@ def minimax(board, depth, player):
                 best = score
     return best
 
+
 def random_V_ai():
     board = game.get_board()
 
@@ -58,6 +60,7 @@ def random_V_ai():
             return
         game.move(COMP, move)
         time.sleep(0.5)
+
 
 if __name__ == "__main__":
     random_V_ai()

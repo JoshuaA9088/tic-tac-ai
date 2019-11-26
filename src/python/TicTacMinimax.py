@@ -11,12 +11,14 @@ Tic Tac Toe!
 HUMAN = 1
 COMP = 2
 
+
 def new_game():
     board = [[0, 0, 0],
              [0, 0, 0],
              [0, 0, 0]]
 
     return board
+
 
 def print_board(board):
     """
@@ -30,9 +32,10 @@ def print_board(board):
         os.system("clear")
     print("\n")
     for i in board:
-         print("\t", end="")
-         print(i)
+        print("\t", end="")
+        print(i)
     print("")
+
 
 def check_win(board, player):
     """
@@ -57,6 +60,7 @@ def check_win(board, player):
     else:
         return False
 
+
 def game_over(board):
     """
     Check and see if a player wins,
@@ -79,6 +83,7 @@ def game_over(board):
                 time.sleep(display_time)
                 return True
 
+
 def calc_moves(board):
     """
     Determine which moves are still possible board
@@ -92,6 +97,7 @@ def calc_moves(board):
                 possible_moves.append([i, j])
     return possible_moves
 
+
 def valid_move(board, move):
     """
     Test to ensure a move by is not a repeat
@@ -103,6 +109,7 @@ def valid_move(board, move):
     else:
         return True
 
+
 def move(board, player, position):
     """
     Update board with a move
@@ -113,6 +120,7 @@ def move(board, player, position):
     board[row][column] = player
     print_board(board)
     return board
+
 
 def human_move(board):
     valid = False
@@ -129,11 +137,13 @@ def human_move(board):
     print_board(board)
     return board
 
+
 def random_move(board, player):
     my_move = random.choice(calc_moves(board))
     board = move(board, player, my_move)
     print_board(board)
     return board
+
 
 def random_game(board):
     comp_turn = True
@@ -145,6 +155,8 @@ def random_game(board):
             board = random_move(board, HUMAN)
             comp_turn = True
         time.sleep(0.1)
+
+
 """
 PSUEDOCODE
 
@@ -213,6 +225,7 @@ def minimax_COMP(b, depth, player):
 
     return best
 
+
 def minimax_HUMAN(b, depth, player):
     # COMP is Maximizer
     # HUMAN is Minimizer
@@ -251,6 +264,7 @@ def minimax_HUMAN(b, depth, player):
 
     return best
 
+
 def random_V_ai(board):
     while not game_over(board):
         # Random Player
@@ -265,6 +279,7 @@ def random_V_ai(board):
         my_move = minimax_COMP(board, depth, COMP)
         board = move(board, COMP, [my_move[0], my_move[1]])
         time.sleep(0.5)
+
 
 def human_V_ai(board):
     while not game_over(board):
@@ -282,6 +297,7 @@ def human_V_ai(board):
         board = move(board, COMP, [my_move[0], my_move[1]])
         time.sleep(0.1)
 
+
 def ai_V_ai(board):
     while not game_over(board):
 
@@ -293,9 +309,9 @@ def ai_V_ai(board):
         # if depth == 9:
         #     board = random_move(board, COMP)
         # else:
-            # comp_move = minimax_COMP(board, depth, COMP)
-            # move(board, COMP, [comp_move[0], comp_move[1]])
-            # move(board, COMP, [1, 1])
+        # comp_move = minimax_COMP(board, depth, COMP)
+        # move(board, COMP, [comp_move[0], comp_move[1]])
+        # move(board, COMP, [1, 1])
         time.sleep(0.1)
 
         if game_over(board):
@@ -306,6 +322,7 @@ def ai_V_ai(board):
         human_move = minimax_HUMAN(board, depth, HUMAN)
         move(board, HUMAN, [human_move[0], human_move[1]])
         time.sleep(0.1)
+
 
 board = [[0, 0, 0],
          [0, 0, 0],

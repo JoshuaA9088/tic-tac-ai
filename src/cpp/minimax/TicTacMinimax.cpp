@@ -15,20 +15,20 @@
 #define X 'X'
 #define O 'O'
 
-using std::vector;
-using std::cout;
 using std::cin;
+using std::cout;
 using std::endl;
 using std::find;
+using std::vector;
 
 // GLOBAL VARS //
 int dim = 3;
 int y = 2, x = 2, w = 4, h = 2;
 
-vector< vector<int> > xPlayed;
-vector< vector<int> > oPlayed;
+vector<vector<int>> xPlayed;
+vector<vector<int>> oPlayed;
 
-vector< vector<int> > coords = map_coords(dim);
+vector<vector<int>> coords = map_coords(dim);
 
 vector<int> min = getMin(map_coords(dim));
 vector<int> max = getMax(map_coords(dim));
@@ -40,17 +40,17 @@ int main()
 {
 	initscr();
 	cbreak();
-    noecho();
+	noecho();
 	keypad(stdscr, TRUE);
 	srand(time(NULL));
 
-    // Color Pair Definitions
-    start_color();
+	// Color Pair Definitions
+	start_color();
 	init_pair(1, COLOR_WHITE, COLOR_BLACK); // Black
-	init_pair(2, COLOR_RED, COLOR_BLACK); // Red
+	init_pair(2, COLOR_RED, COLOR_BLACK);   // Red
 
-    // Create the initial playing board and move cursor to center
-    board(stdscr, y, x, dim, dim, w, h);
+	// Create the initial playing board and move cursor to center
+	board(stdscr, y, x, dim, dim, w, h);
 	move(coords[4][0], coords[4][1]);
 
 	// human_v_minimax();

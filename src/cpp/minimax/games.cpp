@@ -22,17 +22,17 @@ void random_v_human()
 
 		if (check_win(X, xPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
-	    }
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+		}
 
 		comp_move_random(O);
 
 		if (check_win(O, oPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
-	    }
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+		}
 	}
 	return;
 }
@@ -45,20 +45,21 @@ void human_v_minimax()
 
 		if (check_win(X, xPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "X (aka Human) Won!");
 			break;
-	    }
+		}
 
-		if (xPlayed.size() + oPlayed.size() == 9) break;
+		if (xPlayed.size() + oPlayed.size() == 9)
+			break;
 		comp_move_minimax(O);
 
 		if (check_win(O, oPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
 			break;
-	    }
+		}
 	}
 	return;
 }
@@ -77,49 +78,50 @@ void minimax_v_human()
 
 		if (check_win(X, xPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "X (aka Human) Won!");
 			break;
-	    }
-		
-		if (xPlayed.size() + oPlayed.size() == 9) break;
+		}
+
+		if (xPlayed.size() + oPlayed.size() == 9)
+			break;
 		comp_move_minimax(O);
 
 		if (check_win(O, oPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
 			break;
-	    }
+		}
 	}
 	return;
 }
 
 void human_move()
 {
-    bool invalid_move = true;
+	bool invalid_move = true;
 	vector<int> myMove;
 	vector<vector<int>> possible_moves;
-    
+
 	while (invalid_move)
-    {
-        myMove = handleCursor();
-        possible_moves = calc_moves();
-        if (std::find(possible_moves.begin(), possible_moves.end(), myMove) != possible_moves.end())
-        {
-            mvprintw(LINES - 2, 0, "                        ");
-            xPlayed.push_back(myMove);
-            mvaddch(myMove[0], myMove[1], X);
+	{
+		myMove = handleCursor();
+		possible_moves = calc_moves();
+		if (std::find(possible_moves.begin(), possible_moves.end(), myMove) != possible_moves.end())
+		{
+			mvprintw(LINES - 2, 0, "                        ");
+			xPlayed.push_back(myMove);
+			mvaddch(myMove[0], myMove[1], X);
 			move(myMove[0], myMove[1]);
 			refresh();
-            invalid_move = false;
-        }
-        else
-        {
-            mvprintw(LINES - 2, 0, "Invalid move, try again!");
+			invalid_move = false;
+		}
+		else
+		{
+			mvprintw(LINES - 2, 0, "Invalid move, try again!");
 			move(myMove[0], myMove[1]);
-        }
-    }
+		}
+	}
 	return;
 }
 
@@ -148,7 +150,7 @@ void comp_move_random(char player)
 
 void comp_move_minimax(char player)
 {
-    vector<vector<int>> possible_moves = calc_moves();
+	vector<vector<int>> possible_moves = calc_moves();
 	vector<int> myMove;
 	move(coords[4][0], coords[4][1]);
 	if (player == O)
@@ -181,8 +183,8 @@ char minimax_v_minimax()
 
 		if (check_win(X, xPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "X (aka Computer) Won!");
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "X (aka Computer) Won!");
 			return X;
 		}
 
@@ -209,19 +211,18 @@ void minimax_v_random()
 
 		if (check_win(O, oPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
-	    }
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "O (aka Computer) Won!");
+		}
 
 		comp_move_random(X);
 		refresh();
 
 		if (check_win(X, xPlayed))
 		{
-	        mvprintw(LINES - 2, 0, "                        ");
-	        mvprintw(LINES - 2, 0, "X (aka Human) Won!");
-	    }
-
+			mvprintw(LINES - 2, 0, "                        ");
+			mvprintw(LINES - 2, 0, "X (aka Human) Won!");
+		}
 	}
 	return;
 }
