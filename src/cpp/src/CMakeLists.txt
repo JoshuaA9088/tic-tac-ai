@@ -4,19 +4,25 @@
 
 # Optionally glob, but only for CMake 3.12 or later:
 # file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${ModernCMakeExample_SOURCE_DIR}/include/modern/*.hpp")
-set(HEADER_LIST "${tic-tac-ai_SOURCE_DIR}/include/tic-tac-ai/game.h"
-                "${tic-tac-ai_SOURCE_DIR}/include/tic-tac-ai/globals.h"
-                "${tic-tac-ai_SOURCE_DIR}/include/tic-tac-ai/gui.h"
-                "${tic-tac-ai_SOURCE_DIR}/include/tic-tac-ai/minimax.h")
+set(HEADER_LIST "${tic-tac-ai_SOURCE_DIR}/include/game.h"
+                "${tic-tac-ai_SOURCE_DIR}/include/globals.h"
+                "${tic-tac-ai_SOURCE_DIR}/include/gui.h"
+                "${tic-tac-ai_SOURCE_DIR}/include/minimax.h")
 
-# Make an automatic library - will be static or dynamic based on user setting
-add_library(tic-tac-library game.cpp gamemodes.cpp gui.cpp main.cpp minimax.cpp ${HEADER_LIST})
 
-# We need this directory, and users of our library will need it too
-target_include_directories(tic-tac-library PUBLIC ../include)
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 
-# All users of this library will need at least C++11
-target_compile_features(tic-tac-library PUBLIC cxx_std_11)
+# Add all the src cpp files with the headers
+add_executable(tic-tac-cpp game.cpp gamemodes.cpp gui.cpp main.cpp minimax.cpp ${HEADER_LIST})
+# Include ncurses
+target_link_libraries(tic-tac-cpp curses)
+
+# Ensure everything in `include` is included.
+target_include_directories(tic-tac-cpp PUBLIC ../include)
+
+# C++11
+target_compile_features(tic-tac-cpp PUBLIC cxx_std_11)
 
 # IDEs should put the headers in a nice place
 source_group(TREE "${PROJECT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HEADER_LIST})
