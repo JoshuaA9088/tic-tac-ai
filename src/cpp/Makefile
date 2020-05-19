@@ -1,5 +1,5 @@
-CFLAGS = -g -Wall -lncurses
 CC = g++
+FLAGS = -lncurses -o tic.out
 
-all:
-	g++ TicTacMinimax.cpp gui.cpp game_rules.cpp minimax.cpp games.cpp -o tic.out -lncurses
+tic.out:
+	$(CC) *.cpp $(FLAGS)

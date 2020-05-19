@@ -1,84 +1,79 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-#include "globals.h"
-#include "gui.h"
-#include "game_rules.h"
 #include "minimax.h"
+#include "globals.h"
+#include <deque>
+#include <algorithm>
+#include <limits.h>
 
-#define X 'X'
-#define O 'O'
+using std::deque;
 
-#define MAX X
-#define MIN O
+using namespace constants;
+using namespace minimax;
 
-using std::vector;
-
-vector<int> minimax(int depth, char player)
+Score TicTacToe::minimax(int depth, char player)
 {
-    vector<int> best;
-    vector<int> score;
-    vector<vector<int>> possible_moves = calc_moves();
+    Score best;
+    Score score;
+
+    deque<Index> possible_moves = calc_moves();
 
     if (player == MAX)
     {
-        best = {coords[4][0], coords[4][1], -INT8_MAX};
+        best = Score(default_best_move, INT_MIN);
     }
     else
     {
-        best = {coords[4][0], coords[4][1], INT8_MAX};
+        best = Score(default_best_move, INT_MAX);
     }
 
     // Win
-    if (check_win(X, xPlayed))
+    if (check_win(X, default_best_move))
     {
-        best = {coords[4][0], coords[4][1], +1};
+        best = Score(default_best_move, +1);
         return best;
     }
     // Loss
-    else if (check_win(O, oPlayed))
+    else if (check_win(O, default_best_move))
     {
-        best = {coords[4][0], coords[4][1], -1};
+        best = Score(default_best_move, -1);
         return best;
     }
     // Draw
     else if (depth == 0)
     {
-        best = {coords[4][0], coords[4][1], 0};
-        return best;
+        best = Score(default_best_move, 0);
     }
 
-    for (vector<int> cell : possible_moves)
+    for (Index cell : possible_moves)
     {
         if (player == MAX)
         {
-            xPlayed.push_back(cell);
+            board[cell.i][cell.j] = MAX;
             score = minimax(depth - 1, MIN);
-            xPlayed.pop_back();
+            board[cell.i][cell.j] = '0';
 
-            score[0] = cell[0];
-            score[1] = cell[1];
-
-            if (score[2] > best[2])
+            if (score.score > best.score)
             {
+
+                score.index.i = cell.i;
+                score.index.j = cell.j;
                 best = score;
             }
         }
+
         else if (player == MIN)
         {
-            oPlayed.push_back(cell);
+            board[cell.i][cell.j] = MIN;
             score = minimax(depth - 1, MAX);
-            oPlayed.pop_back();
+            board[cell.i][cell.j] = '0';
 
-            score[0] = cell[0];
-            score[1] = cell[1];
-
-            if (score[2] < best[2])
+            if (score.score > best.score)
             {
+                score.index.i = cell.i;
+                score.index.j = cell.j;
                 best = score;
             }
         }
     }
+
     return best;
 }
