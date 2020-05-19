@@ -12,6 +12,7 @@ public:
     TicTacToe();
     ~TicTacToe();
 
+    void update_board();
     void center();
     void ascii_print();
 

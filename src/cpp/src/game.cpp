@@ -80,6 +80,29 @@ TicTacToe::~TicTacToe()
     delete[] coords;
 }
 
+void TicTacToe::update_board()
+{
+    int x;
+    int y;
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (board[i][j] != '0')
+            {
+                x = index_to_coord(start_x, j, w);
+                y = index_to_coord(start_y, i, h);
+
+                mvaddch(y, x, board[i][j]);
+            }
+        }
+    }
+
+    center();
+    refresh();
+}
+
 void TicTacToe::center()
 {
     move(coords[1][1].y, coords[1][0].x);
@@ -167,10 +190,8 @@ Pt TicTacToe::human_move()
         if (board[i][j] == '0')
         {
             mvprintw(LINES - 2, 0, "                        ");
-            mvaddch(my_move.y, my_move.x, X);
             board[i][j] = X;
-            center();
-            refresh();
+            update_board();
 
             total_moves++;
             invalid_move = false;
@@ -203,11 +224,7 @@ Pt TicTacToe::random_move()
         if (board[i][j] == '0')
         {
             board[i][j] = O;
-            i = index_to_coord(start_y, i, h);
-            j = index_to_coord(start_x, j, w);
-            mvaddch(i, j, O);
-            center();
-            refresh();
+            update_board();
 
             total_moves++;
             invalid = false;
@@ -230,10 +247,7 @@ Pt TicTacToe::comp_minimax_move()
     int y = index_to_coord(start_y, my_move.index.j, h);
 
     board[my_move.index.i][my_move.index.j] = O;
-    mvaddch(y, x, O);
-
-    center();
-    refresh();
+    update_board();
 
     return Pt(x, y);
 }
