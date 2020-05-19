@@ -128,8 +128,8 @@ bool TicTacToe::check_win(char player, Index last_move)
     int col, row, diag, rdiag;
     col = row = diag = rdiag = 0;
 
-    int y = last_move.j;
-    int x = last_move.i;
+    int y = last_move.i;
+    int x = last_move.j;
 
     for (int i = 0; i < 3; i++)
     {
@@ -237,10 +237,6 @@ Pt TicTacToe::random_move()
 Pt TicTacToe::comp_minimax_move()
 {
     deque<Index> possible_moves = calc_moves();
-    // Score my_move;
-
-    // move(y, x);
-
     Score my_move = minimax(possible_moves.size(), O);
 
     int x = index_to_coord(start_x, my_move.index.i, w);
@@ -248,6 +244,7 @@ Pt TicTacToe::comp_minimax_move()
 
     board[my_move.index.i][my_move.index.j] = O;
     update_board();
+    total_moves++;
 
     return Pt(x, y);
 }
