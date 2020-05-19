@@ -66,7 +66,7 @@ Score TicTacToe::minimax(int depth, char player)
             score = minimax(depth - 1, MAX);
             board[cell.i][cell.j] = '0';
 
-            if (score.score > best.score)
+            if (score.score < best.score)
             {
                 score.index.i = cell.i;
                 score.index.j = cell.j;
