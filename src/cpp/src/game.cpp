@@ -100,32 +100,6 @@ void TicTacToe::ascii_print()
     return;
 }
 
-bool TicTacToe::check_win(char player, Pt last_move)
-{
-    int col, row, diag, rdiag;
-    col = row = diag = rdiag = 0;
-
-    int y = coord_to_index(start_y, last_move.y, h);
-    int x = coord_to_index(start_x, last_move.x, w);
-
-    for (int i = 0; i < 3; i++)
-    {
-        if (board[i][x] == player)
-            col++;
-        if (board[y][i] == player)
-            row++;
-        if (board[i][i] == player)
-            diag++;
-        if (board[2 - i][i] == player)
-            rdiag++;
-    }
-
-    if (row == 3 || col == 3 || diag == 3 || rdiag == 3)
-        return true;
-
-    return false;
-}
-
 bool TicTacToe::check_win(char player, Index last_move)
 {
     int col, row, diag, rdiag;
@@ -150,6 +124,17 @@ bool TicTacToe::check_win(char player, Index last_move)
         return true;
 
     return false;
+}
+
+bool TicTacToe::check_win(char player, Pt last_move)
+{
+    int col, row, diag, rdiag;
+    col = row = diag = rdiag = 0;
+
+    int y = coord_to_index(start_y, last_move.y, h);
+    int x = coord_to_index(start_x, last_move.x, w);
+
+    return check_win(player, Index(x, y));
 }
 
 deque<Index> TicTacToe::calc_moves()

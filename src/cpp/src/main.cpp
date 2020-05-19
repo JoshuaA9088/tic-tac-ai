@@ -23,8 +23,8 @@ int main()
     board(stdscr, start_y, start_x, 3, 3, w, h);
 
     TicTacToe t;
-    t.human_V_random();
-    // t.human_V_minimax();
+    // t.human_V_random();
+    t.human_V_minimax();
     safe_exit();
 
     return 0;
