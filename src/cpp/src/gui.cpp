@@ -7,94 +7,47 @@
 
 #include "globals.h"
 #include "gui.h"
-#include "game_rules.h"
+#include "game.h"
 
-#define X 'X';
-#define O 'O';
-
-using std::find;
-using std::vector;
-
-vector<int> getMin(vector<vector<int>> b)
-{
-    int minX = INT8_MAX;
-    int minY = INT8_MAX;
-    vector<int> ret;
-
-    for (vector<int> v : b)
-    {
-        // Get min x / y coord
-        if (v[0] < minY)
-            minY = v[0];
-        if (v[1] < minX)
-            minX = v[1];
-    }
-    ret.push_back(minY);
-    ret.push_back(minX);
-    return ret;
-}
-
-vector<int> getMax(vector<vector<int>> b)
-{
-    int maxX = 0;
-    int maxY = 0;
-    vector<int> ret;
-
-    for (vector<int> v : b)
-    {
-        // Get max x / y coord
-        if (v[0] > maxY)
-            maxY = v[0];
-        if (v[1] > maxX)
-            maxX = v[1];
-    }
-
-    ret.push_back(maxY);
-    ret.push_back(maxX);
-    return ret;
-}
-
-vector<int> handleCursor()
+Pt handleCursor(Pt min, Pt max)
 {
     int cX, cY;
-    int ch;
+    char ch;
     do
     {
         ch = getch();
         if (ch == 'q') // Q to exit gracefully
         {
-            endwin();
-            clear();
-            exit(0);
+            safe_exit();
         }
         else if (ch == KEY_LEFT || ch == 'h')
         {
             getyx(stdscr, cY, cX);
-            if ((cX - 4) >= min[1])
+            if ((cX - 4) >= min.x)
                 move(cY, cX - 4);
         }
         else if (ch == KEY_RIGHT || ch == 'l')
         {
             getyx(stdscr, cY, cX);
-            if ((cX + 4) <= max[1])
+            if ((cX + 4) <= max.x)
                 move(cY, cX + 4);
         }
         else if (ch == KEY_UP || ch == 'k')
         {
             getyx(stdscr, cY, cX);
-            if ((cY - 2) >= min[0])
+            if ((cY - 2) >= min.y)
                 move(cY - 2, cX);
         }
         else if (ch == KEY_DOWN || ch == 'j')
         {
             getyx(stdscr, cY, cX);
-            if ((cY + 2) <= max[0])
+            if ((cY + 2) <= max.y)
                 move(cY + 2, cX);
         }
     } while (ch != ' ');
 
     getyx(stdscr, cY, cX);
-    return {cY, cX};
+    return Pt(cX, cY);
 }
 
 void board(WINDOW *win, int starty, int startx, int lines, int cols,
