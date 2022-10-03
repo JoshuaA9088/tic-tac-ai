@@ -1,6 +1,6 @@
 #pragma once
 
-/* #define VERSION_MAJOR "@ticTacAi_VERSION_MAJOR@" */
-/* #define VERSION_MINOR "@ticTacAi_VERSION_MAJOR@" */
-/* #define VERSION "@ticTacAi_VERSION@" */
-/* #define DESCRIPTION "@ticTacAi_DESCRIPTION@" */
+#define VERSION_MAJOR "@tic-tac-ai_VERSION_MAJOR@"
+#define VERSION_MINOR "@tic-tac-ai_VERSION_MINOR@"
+#define VERSION "@tic-tac-ai_VERSION@"
+#define DESCRIPTION "@tic-tac-ai_DESCRIPTION@"
