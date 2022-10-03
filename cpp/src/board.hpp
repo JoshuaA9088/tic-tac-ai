@@ -14,6 +14,9 @@ constexpr char X = 'X';
 constexpr char O = 'O';
 constexpr char EMPTY = '0';
 
+constexpr char MAX_PLAYER = O;
+constexpr char MIN_PLAYER = X;
+
 // Board placement within terminal
 constexpr size_t START_X = 2;
 constexpr size_t START_Y = 2;
@@ -47,13 +50,30 @@ struct Pt<int>
 struct Cell
 {
   Pt<int> pos;
+  int index;
   char contents;
 
   Cell(){};
-  Cell(Pt<int> pos) : pos(pos){};
+  Cell(Pt<int> pos, int index) : pos(pos), index(index){};
 };
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell);
+
+struct Move
+{
+  Cell* cell;
+  int score;
+
+  Move() = default;
+  Move(Cell* c, int v) : cell(c), score(v){};
+};
+
+std::ostream& operator<<(std::ostream& os, const Move& move);
+
+// Debug to print board state to cerr.
+std::ostream& operator<<(
+    std::ostream& os,
+    const std::array<Cell, constants::BOARD_DIM * constants::BOARD_DIM> board);
 
 class Board
 {
@@ -68,6 +88,9 @@ class Board
   std::array<Cell, constants::BOARD_DIM * constants::BOARD_DIM> cells;
   const Pt<int> min;
   const Pt<int> max;
+
+  // Minimax
+  Move minimax(const int depth, const char player);
 
  public:
   Board();
@@ -85,8 +108,11 @@ class Board
 
   // Game logic
   bool check_win(const char& player, const int& last_move) const;
+  bool check_win(const char& player) const;
   bool is_game_over() const;
   std::vector<Cell*> get_available_cells() const;
+
+  Move minimax();
 
   // Game modes
   void v_human();

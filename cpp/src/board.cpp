@@ -16,7 +16,40 @@ std::ostream& operator<<(std::ostream& os, const Pt<T>& pt)
 
 std::ostream& operator<<(std::ostream& os, const Cell& cell)
 {
-  os << "Cell(contents=" << cell.contents << ", pos=" << cell.pos << ")";
+  os << "Cell(contents=" << cell.contents << ", pos=" << cell.pos
+     << ", index=" << cell.index << ")";
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Move& move)
+{
+  os << "Move(cell=";
+  if (move.cell != nullptr)
+  {
+    os << *move.cell;
+  }
+  else
+  {
+    os << "nullptr";
+  }
+
+  os << ", value=" << move.score << ")";
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         const std::array<Cell, BOARD_DIM * BOARD_DIM> board)
+{
+  for (int i = 0; i < BOARD_DIM; ++i)
+  {
+    for (int j = 0; j < BOARD_DIM; ++j)
+    {
+      int index = (i * BOARD_DIM) + j;
+      os << board[index].contents << " ";
+    }
+    os << "\n";
+  }
+
   return os;
 }
 
@@ -35,6 +68,7 @@ Board::Board()
       cells[index].contents = EMPTY;
       cells[index].pos.x = START_X + (i * CELL_WIDTH) + (CELL_WIDTH / 2);
       cells[index].pos.y = START_Y + (j * CELL_HEIGHT) + (CELL_HEIGHT / 2);
+      cells[index].index = index;
     }
   }
 
@@ -226,6 +260,67 @@ bool Board::check_win(const char& player, const int& last_move) const
           rdiag == BOARD_DIM);
 }
 
+bool Board::check_win(const char& player) const
+{
+  int col, row, diag, rdiag;
+  col = row = diag = rdiag = 0;
+
+  for (int i = 0; i < BOARD_DIM; i++)
+  {
+    for (int j = 0; j < BOARD_DIM; j++)
+    {
+      const int col_index = (j * BOARD_DIM) + i;
+      const int row_index = (i * BOARD_DIM) + j;
+      if (cells[col_index].contents == player)
+      {
+        ++col;
+      }
+
+      if (cells[row_index].contents == player)
+      {
+        ++row;
+      }
+    }
+
+    if (col >= BOARD_DIM || row >= BOARD_DIM)
+    {
+      return true;
+    }
+    col = row = 0;
+  }
+
+  int diag_index = 0;
+  for (int i = 0; i < BOARD_DIM; i++)
+  {
+    if (cells[diag_index].contents == player)
+    {
+      diag++;
+    }
+    diag_index += 4;
+  }
+  if (diag >= BOARD_DIM)
+  {
+    return true;
+  }
+
+  int rdiag_index = 2;
+  for (int i = 0; i < BOARD_DIM; i++)
+  {
+    if (cells[rdiag_index].contents == player)
+    {
+      rdiag++;
+    }
+    rdiag_index += 2;
+  }
+
+  if (rdiag >= BOARD_DIM)
+  {
+    return true;
+  }
+
+  return false;
+}
+
 bool Board::is_game_over() const
 {
   for (auto& c : cells)
@@ -342,13 +437,8 @@ void Board::v_random()
     const std::vector<Cell*> available_moves = get_available_cells();
     const int random_index = std::rand() % available_moves.size();
     available_moves[random_index]->contents = O;
-    x = (available_moves[random_index]->pos.x - START_X - (CELL_WIDTH / 2)) /
-        CELL_WIDTH;
-    y = (available_moves[random_index]->pos.y - START_Y - (CELL_HEIGHT / 2)) /
-        CELL_HEIGHT;
-    i = (x * BOARD_DIM) + y;
 
-    if (check_win(current_turn, i))
+    if (check_win(current_turn, available_moves[random_index]->index))
     {
       draw();
       return;
@@ -361,4 +451,58 @@ void Board::v_random()
 
 void Board::v_minimax()
 {
+  char current_turn = X;
+  int i, x, y;
+  Cell* current_cell;
+  Pt<int> move;
+
+  srand(std::time(0));
+  while (!is_game_over())
+  {
+    // Handle an input from the user.
+    while (current_turn == X)
+    {
+      if (!handle_cursor(&move))
+      {
+        return;
+      }
+      x = (move.x - START_X - (CELL_WIDTH / 2)) / CELL_WIDTH;
+      y = (move.y - START_Y - (CELL_HEIGHT / 2)) / CELL_HEIGHT;
+      i = (x * BOARD_DIM) + y;
+      current_cell = &cells[i];
+
+      if (current_cell->contents != EMPTY)
+      {
+        continue;
+      }
+      current_cell->contents = X;
+
+      if (check_win(current_turn, i))
+      {
+        draw();
+        return;
+      }
+      current_turn = O;
+
+      draw();
+    }
+
+    Move comp_move = minimax();
+    std::cerr << comp_move << std::endl;
+    if (comp_move.cell == nullptr)
+    {
+      // Stalemate
+      break;
+    }
+    comp_move.cell->contents = O;
+
+    if (check_win(current_turn, comp_move.cell->index))
+    {
+      draw();
+      return;
+    }
+
+    current_turn = X;
+    draw();
+  }
 }

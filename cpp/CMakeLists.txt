@@ -14,7 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SRC_FILES
     ${PROJECT_SOURCE_DIR}/src/main.cpp
-    ${PROJECT_SOURCE_DIR}/src/board.cpp)
+    ${PROJECT_SOURCE_DIR}/src/board.cpp
+    ${PROJECT_SOURCE_DIR}/src/minimax.cpp)
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
@@ -33,5 +34,19 @@ include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} curses)
 
 # Compiler warnings
-add_compile_options("$<$<CONFIG:Release>:-Wall;-pedantic;-O2;-DNDEBUG")
-add_compile_options("$<$<CONFIG:Debug>:-Wall;-pedantic;-O0;-ggdb;-fsanitize=address")
+# add_compile_options("$<$<CONFIG:Release>:-Wall;-pedantic;-O2;-DNDEBUG")
+# add_compile_options("$<$<CONFIG:Debug>:-Wall;-pedantic;-O0;-ggdb;-fsanitize=address")
+
+target_compile_options(
+  ${PROJECT_NAME}
+  PRIVATE
+  -Wall
+  -Wextra
+  -pedantic)
+
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+  target_compile_options(${PROJECT_NAME} PRIVATE -Og -ggdb -fsanitize=address)
+  target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+else()
+  target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+endif()
