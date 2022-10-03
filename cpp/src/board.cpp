@@ -488,7 +488,6 @@ void Board::v_minimax()
     }
 
     Move comp_move = minimax();
-    std::cerr << comp_move << std::endl;
     if (comp_move.cell == nullptr)
     {
       // Stalemate

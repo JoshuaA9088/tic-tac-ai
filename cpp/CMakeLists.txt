@@ -33,16 +33,13 @@ find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} curses)
 
-# Compiler warnings
-# add_compile_options("$<$<CONFIG:Release>:-Wall;-pedantic;-O2;-DNDEBUG")
-# add_compile_options("$<$<CONFIG:Debug>:-Wall;-pedantic;-O0;-ggdb;-fsanitize=address")
-
 target_compile_options(
   ${PROJECT_NAME}
   PRIVATE
   -Wall
   -Wextra
-  -pedantic)
+  -pedantic
+  -Wno-sign-compare)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
   target_compile_options(${PROJECT_NAME} PRIVATE -Og -ggdb -fsanitize=address)
