@@ -1,10 +1,8 @@
 #include "board.hpp"
 
 #include <algorithm>
-#include <cmath>
+#include <ctime>
 #include <iostream>
-#include <iterator>
-#include <ranges>
 
 using namespace constants;
 
@@ -228,13 +226,42 @@ bool Board::check_win(const char& player, const int& last_move) const
           rdiag == BOARD_DIM);
 }
 
-void Board::game_loop()
+bool Board::is_game_over() const
+{
+  for (auto& c : cells)
+  {
+    if (c.contents == EMPTY)
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+std::vector<Cell*> Board::get_available_cells() const
+{
+  std::vector<Cell*> result;
+  result.reserve(16);
+
+  for (auto& c : cells)
+  {
+    if (c.contents == EMPTY)
+    {
+      result.push_back(const_cast<Cell*>(&c));
+    }
+  }
+
+  return result;
+}
+
+void Board::v_human()
 {
   char current_turn = X;
   int i, x, y;
   Cell* current_cell;
   Pt<int> move;
-  while (handle_cursor(&move))
+  while (handle_cursor(&move) && !is_game_over())
   {
     x = (move.x - START_X - (CELL_WIDTH / 2)) / CELL_WIDTH;
     y = (move.y - START_Y - (CELL_HEIGHT / 2)) / CELL_HEIGHT;
@@ -264,10 +291,74 @@ void Board::game_loop()
 
     if (check_win(current_turn, i))
     {
+      draw();
       break;
     }
     current_turn = current_turn == X ? O : X;
 
     draw();
   }
+}
+
+void Board::v_random()
+{
+  char current_turn = X;
+  int i, x, y;
+  Cell* current_cell;
+  Pt<int> move;
+
+  srand(std::time(0));
+  while (!is_game_over())
+  {
+    // Handle an input from the user.
+    while (current_turn == X)
+    {
+      if (!handle_cursor(&move))
+      {
+        return;
+      }
+      x = (move.x - START_X - (CELL_WIDTH / 2)) / CELL_WIDTH;
+      y = (move.y - START_Y - (CELL_HEIGHT / 2)) / CELL_HEIGHT;
+      i = (x * BOARD_DIM) + y;
+      current_cell = &cells[i];
+
+      if (current_cell->contents != EMPTY)
+      {
+        continue;
+      }
+      current_cell->contents = X;
+
+      if (check_win(current_turn, i))
+      {
+        draw();
+        return;
+      }
+      current_turn = O;
+
+      draw();
+    }
+
+    // Simulate a machine move.
+    const std::vector<Cell*> available_moves = get_available_cells();
+    const int random_index = std::rand() % available_moves.size();
+    available_moves[random_index]->contents = O;
+    x = (available_moves[random_index]->pos.x - START_X - (CELL_WIDTH / 2)) /
+        CELL_WIDTH;
+    y = (available_moves[random_index]->pos.y - START_Y - (CELL_HEIGHT / 2)) /
+        CELL_HEIGHT;
+    i = (x * BOARD_DIM) + y;
+
+    if (check_win(current_turn, i))
+    {
+      draw();
+      return;
+    }
+
+    current_turn = X;
+    draw();
+  }
+}
+
+void Board::v_minimax()
+{
 }

@@ -4,9 +4,8 @@
 #include <ncurses.h>
 
 #include <array>
-#include <initializer_list>
 #include <iostream>
-#include <memory>
+#include <vector>
 
 namespace constants
 {
@@ -86,7 +85,13 @@ class Board
 
   // Game logic
   bool check_win(const char& player, const int& last_move) const;
-  void game_loop();
+  bool is_game_over() const;
+  std::vector<Cell*> get_available_cells() const;
+
+  // Game modes
+  void v_human();
+  void v_random();
+  void v_minimax();
 };
 
 #endif  // BOARD_HPP
