@@ -334,6 +334,20 @@ bool Board::is_game_over() const
   return true;
 }
 
+void Board::win_handler(const char& player) const
+{
+  const int pos = LINES - 2;
+  mvprintw(pos, 0, "                            ");
+  if (player != EMPTY)
+  {
+    mvprintw(pos, 0, "Player %c Won!", player);
+  }
+  else
+  {
+    mvprintw(pos, 0, "Stalemate!");
+  }
+}
+
 std::vector<Cell*> Board::get_available_cells() const
 {
   std::vector<Cell*> result;
@@ -386,13 +400,19 @@ void Board::v_human()
 
     if (check_win(current_turn, i))
     {
+      win_handler(current_turn);
       draw();
+      getch();
       break;
     }
     current_turn = current_turn == X ? O : X;
 
     draw();
   }
+
+  win_handler(EMPTY);
+  draw();
+  getch();
 }
 
 void Board::v_random()
@@ -425,7 +445,9 @@ void Board::v_random()
 
       if (check_win(current_turn, i))
       {
+        win_handler(current_turn);
         draw();
+        getch();
         return;
       }
       current_turn = O;
@@ -440,6 +462,8 @@ void Board::v_random()
 
     if (check_win(current_turn, available_moves[random_index]->index))
     {
+      win_handler(current_turn);
+      getch();
       draw();
       return;
     }
@@ -447,6 +471,10 @@ void Board::v_random()
     current_turn = X;
     draw();
   }
+
+  win_handler(EMPTY);
+  draw();
+  getch();
 }
 
 void Board::v_minimax()
@@ -479,7 +507,9 @@ void Board::v_minimax()
 
       if (check_win(current_turn, i))
       {
+        win_handler(current_turn);
         draw();
+        getch();
         return;
       }
       current_turn = O;
@@ -497,11 +527,17 @@ void Board::v_minimax()
 
     if (check_win(current_turn, comp_move.cell->index))
     {
+      win_handler(current_turn);
       draw();
+      getch();
       return;
     }
 
     current_turn = X;
     draw();
   }
+
+  win_handler(EMPTY);
+  draw();
+  getch();
 }

@@ -110,6 +110,7 @@ class Board
   bool check_win(const char& player, const int& last_move) const;
   bool check_win(const char& player) const;
   bool is_game_over() const;
+  void win_handler(const char& player) const;
   std::vector<Cell*> get_available_cells() const;
 
   Move minimax();
