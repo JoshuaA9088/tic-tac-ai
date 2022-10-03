@@ -1,0 +1,6 @@
+#pragma once
+
+/* #define VERSION_MAJOR "@ticTacAi_VERSION_MAJOR@" */
+/* #define VERSION_MINOR "@ticTacAi_VERSION_MAJOR@" */
+/* #define VERSION "@ticTacAi_VERSION@" */
+/* #define DESCRIPTION "@ticTacAi_DESCRIPTION@" */
