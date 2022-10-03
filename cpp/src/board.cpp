@@ -410,9 +410,12 @@ void Board::v_human()
     draw();
   }
 
-  win_handler(EMPTY);
-  draw();
-  getch();
+  if (is_game_over())
+  {
+    win_handler(EMPTY);
+    draw();
+    getch();
+  }
 }
 
 void Board::v_random()

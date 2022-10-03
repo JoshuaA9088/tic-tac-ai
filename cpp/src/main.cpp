@@ -13,7 +13,6 @@ int main(int argc, char** argv)
 
   bool version = false;
   app.add_flag("-v, --version", version, "Output version information and exit");
-  app.require_subcommand();
 
   CLI::App* human_subcom =
       app.add_subcommand("human", "Play against another human");
@@ -36,13 +35,13 @@ int main(int argc, char** argv)
         b.v_random();
         return 0;
       });
-  minimax_subcom->final_callback(
-      []()
-      {
-        Board b;
-        b.v_minimax();
-        return 0;
-      });
+  const auto minimax_callback = []()
+  {
+    Board b;
+    b.v_minimax();
+    return 0;
+  };
+  minimax_subcom->final_callback(minimax_callback);
 
   CLI11_PARSE(app, argc, argv);
 
@@ -50,6 +49,12 @@ int main(int argc, char** argv)
   {
     std::cout << VERSION << "\n";
     return 0;
+  }
+
+  if (!app.got_subcommand(human_subcom) && !app.got_subcommand(random_subcom) &&
+      !app.got_subcommand(minimax_subcom))
+  {
+    minimax_callback();
   }
 
   return 0;
