@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.11...3.16)
 
 # Project name and a few useful settings. Other commands can pick up the results
 project(tic-tac-ai
-    VERSION 2.0
+    VERSION 2.1
     DESCRIPTION "Tic-Tac-Toe with minimax!"
     LANGUAGES CXX)
 configure_file(src/config.h.in config.hpp)
 
 include(FetchContent)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SRC_FILES
