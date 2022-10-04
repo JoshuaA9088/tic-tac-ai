@@ -466,8 +466,8 @@ void Board::v_random()
     if (check_win(current_turn, available_moves[random_index]->index))
     {
       win_handler(current_turn);
-      getch();
       draw();
+      getch();
       return;
     }
 
